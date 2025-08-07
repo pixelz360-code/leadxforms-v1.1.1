@@ -1,0 +1,23 @@
+{
+    "payload_sent": {
+        "form_name": "bbbbb",
+        "form_key": "24904085120253107",
+        "website_url": "https:\/\/wp-lead-forms.test"
+    },
+    "api_url": "http:\/\/127.0.0.1:8000\/api\/v1\/customer-forms\/store",
+    "response": {
+        "headers": {},
+        "body": "{\"success\":true,\"data\":{\"form_name\":\"bbbbb\",\"form_key\":\"24904085120253107\",\"website_id\":1,\"updated_at\":\"2025-07-31T04:08:52.000000Z\",\"created_at\":\"2025-07-31T04:08:52.000000Z\",\"id\":1}}",
+        "response": {
+            "code": 201,
+            "message": "Created"
+        },
+        "cookies": [],
+        "filename": null,
+        "http_response": {
+            "data": null,
+            "headers": null,
+            "status": null
+        }
+    }
+}
