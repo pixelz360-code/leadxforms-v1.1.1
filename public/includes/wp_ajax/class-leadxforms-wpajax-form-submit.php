@@ -331,12 +331,20 @@ class LeadXForms_WpAjax_FormSubmit {
                 wp_die();
 			
             } else {
-				dd($isSpam);
-                $message = isset($messages['sending_failed']) ? $messages['sending_failed'] : 'An attempt to send your message encountered an error. Please retry at a later time.';
-                echo wp_send_json_error([
-                    'errors' => [],
+            $redirect = 'none';
+                if (
+                    $valid_license &&
+                    (isset($settings['after_redirect']) && $settings['after_redirect'] == true) &&
+                    (isset($settings['redirect_url']) && !empty($settings['redirect_url']))
+                ) {
+                    $redirect = $settings['redirect_url'];
+                }
+            
+                $message = isset($messages['mail_sent']) ? $messages['mail_sent'] : 'Form submitted successfully (mail failed).';
+                echo wp_send_json_success([
+                    'redirect' => $redirect,
                     'message' => __($message, 'lxform')
-                ]);
+                ], 200);
                 wp_die();
             }
         } else {
