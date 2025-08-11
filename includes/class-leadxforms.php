@@ -1,6 +1,7 @@
 <?php
 
-class LeadXForms {
+class LeadXForms
+{
 	protected $loader;
 	protected $dependencies = [
 		'includes/class-leadxforms-loader.php',
@@ -8,13 +9,14 @@ class LeadXForms {
 		'includes/class-leadxforms-visitordetails.php',
 		'includes/class-leadxforms-maildata-filter.php',
 		'includes/class-leadxforms-smtp-connect.php',
-
+		'includes/wp_ajax/class-leadxforms-wpajax-keyword-sync.php',
 		'includes/database/class-leadxforms-database-forms.php',
 		'includes/database/class-leadxforms-database-mail.php',
+		'includes/database/class-leadxforms-database-mail-logs.php',
 		'includes/database/class-leadxforms-database-migration.php',
 		'includes/shorttags/class-leadxforms-shorttag-tag.php',
 		'includes/shorttags/class-leadxforms-shorttag-checkbox-list.php',
-        'includes/shorttags/class-leadxforms-shorttag-appointment.php',
+		'includes/shorttags/class-leadxforms-shorttag-appointment.php',
 		'includes/shorttags/class-leadxforms-shorttag-checkbox.php',
 		'includes/shorttags/class-leadxforms-shorttag-date.php',
 		'includes/shorttags/class-leadxforms-shorttag-email.php',
@@ -69,7 +71,7 @@ class LeadXForms {
 
 		'public/class-leadxforms-public.php',
 		'public/includes/wp_ajax/class-leadxforms-wpajax-form-submit.php',
-        'includes/wp_ajax/class-leadxforms-wpajax-form-blockedIP.php',
+		'includes/wp_ajax/class-leadxforms-wpajax-form-blockedIP.php',
 	];
 
 	protected $services = [
@@ -83,7 +85,7 @@ class LeadXForms {
 		'LeadXForms_WpAjax_FormUpdate',
 		'LeadXForms_WpAjax_FormDelete',
 		'LeadXForms_WpAjax_FormBulkDelete',
-        'LeadXForms_WpAjax_FormBlockedIP',
+		'LeadXForms_WpAjax_FormBlockedIP',
 		'LeadXForms_WpAjax_LeadGetAll',
 		'LeadXForms_WpAjax_LeadView',
 		'LeadXForms_WpAjax_LeadGeneratePDF',
@@ -100,7 +102,7 @@ class LeadXForms {
 		'LeadXForms_WpAjax_SmtpGetDetails',
 		'LeadXForms_WpAjax_LicenseKeySave',
 		'LeadXForms_WpAjax_LicenseKeyGet',
-
+		'LeadXForms_WpAjax_KeywordSync',
 		'LeadXForms_Shortcode_Form',
 
 		'LeadXForms_Database_Migration',
@@ -111,10 +113,11 @@ class LeadXForms {
 		'LeadXforms_CustomStyle',
 		'LeadXForms_Public',
 		'LeadXForms_WpAjax_FormSubmit',
-        'LeadXForms_WpAjax_FormBlockedIP'
+		'LeadXForms_WpAjax_FormBlockedIP'
 	];
 
-	public function __construct() {
+	public function __construct()
+	{
 		$this->load_dependencies();
 		$this->loader = new LeadXForms_Loader();
 
@@ -124,31 +127,35 @@ class LeadXForms {
 
 
 
-    private function load_dependencies() {
-		if(count($this->dependencies)) {
-            foreach($this->dependencies as $path) {
-                require_once(plugin_dir_path( dirname( __FILE__ ) ) . $path);
-            }
-        }
+	private function load_dependencies()
+	{
+		if (count($this->dependencies)) {
+			foreach ($this->dependencies as $path) {
+				require_once(plugin_dir_path(dirname(__FILE__)) . $path);
+			}
+		}
 	}
 
-	private function load_services() {
+	private function load_services()
+	{
 		$services = $this->services;
-        if(count($services)) {
-            foreach($services as $class) {
-                $service = new $class($this->loader);
-                if(method_exists($service, 'init')) {
-                    $service->init();
-                }
-            }
-        }
+		if (count($services)) {
+			foreach ($services as $class) {
+				$service = new $class($this->loader);
+				if (method_exists($service, 'init')) {
+					$service->init();
+				}
+			}
+		}
 	}
 
-	public function run() {
+	public function run()
+	{
 		$this->loader->run();
 	}
 
-	public function get_loader() {
+	public function get_loader()
+	{
 		return $this->loader;
 	}
 }

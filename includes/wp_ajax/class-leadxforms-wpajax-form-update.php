@@ -42,7 +42,7 @@ class LeadXForms_WpAjax_FormUpdate
         $mail2 = isset($_POST['mail2']) ? $_POST['mail2'] : 0;
         $messages = isset($_POST['messages']) ? json_decode(wp_unslash($_POST['messages'])) : '';
         $settings = isset($_POST['settings']) ? json_decode(wp_unslash($_POST['settings'])) : '';
-        
+
         $user_id = get_current_user_id();
 
         if ($form_id === '') {
@@ -61,34 +61,37 @@ class LeadXForms_WpAjax_FormUpdate
             'id' => $form_id
         ]);
 
-        if ($settings) {
-            $url = $this->loader->api_url() . '/keyword/updateOrCreate';
-            $license_key = get_option('leadxforms_license_key');
-            $data = [
-                "form_id" => $form_id,
-                "form_name" => $form_name,
-                "setting" => $_POST['settings'],
-                "user_id" => $user_id
-            ];
+        if (isset($_POST['settings'])) {
+            $settings = json_decode(stripslashes($_POST['settings']), true);
 
-            $headers = [
-                'LicenseKey: ' . $license_key,
-                'websiteurl: ' . lxf_get_domain(),
-                'Content-Type: application/x-www-form-urlencoded',
-                'Accept: application/json'
-            ];
+            // Empty array par bhi sync karo (clear ke liye)
+            if (isset($settings['keyword_block']) && is_array($settings['keyword_block'])) {
+                $url         = $this->loader->api_url() . '/keyword/updateOrCreate';
+                $license_key = get_option('leadxforms_license_key');
 
-            $ch = curl_init($url);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                $data = [
+                    'form_id'  => (int) $form_id,
+                    // 'form_key' => $form_key ?? null, // optional
+                    'settings' => $settings,                         // full settings
+                    'keywords' => $settings['keyword_block'] ?? [],  // direct pass
+                ];
 
-            $response = curl_exec($ch);
-            if (curl_errno($ch)) {
-                echo 'Curl error: ' . curl_error($ch);
+                $headers = [
+                    'LicenseKey: ' . $license_key,
+                    'websiteurl: ' . lxf_get_domain(),
+                    'Content-Type: application/json',
+                    'Accept: application/json',
+                ];
+
+                $ch = curl_init($url);
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, wp_json_encode($data));
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_TIMEOUT, 15);
+                $response = curl_exec($ch);
+                curl_close($ch);
             }
-            curl_close($ch);
         }
 
 
@@ -118,7 +121,7 @@ class LeadXForms_WpAjax_FormUpdate
                         'form_id' => $form_id,
                         'id' => $mail->id
                     ]);
-                } elseif($mail2 == 1) {
+                } elseif ($mail2 == 1) {
                     $this->db->insert($this->prefix . 'lxform_mail', [
                         'form_id' => $form_id,
                         'sender' => (count($mail->mail->sender) > 0) ? json_encode($mail->mail->sender) : null,

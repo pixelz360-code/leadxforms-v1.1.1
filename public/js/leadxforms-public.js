@@ -44,8 +44,9 @@
                 a.removeAttribute("disabled");
               if ((a.removeAttribute("disabled"), t))
                 if (t.success) {
-                  console.log('Form submission success:', t.message);
-            
+                  const msg = t?.data?.message ?? 'Submitted';
+                  console.log('Form submission success:', t.data);
+
                   var n = t.data;
                   const mailFailed = n.message.includes('');
             

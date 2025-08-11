@@ -4,7 +4,8 @@ class LeadXForms_Database_Migration {
 
     protected $migrations = [
         LeadXForms_Database_Forms::class,
-        LeadXForms_Database_Mail::class
+        LeadXForms_Database_Mail::class,
+        LeadXForms_Database_Mail_Logs::class
     ];
 
     public function init_method($method) {
