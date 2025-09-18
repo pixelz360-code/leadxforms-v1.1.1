@@ -91,9 +91,10 @@ class LeadXForms_WpAjax_FormSubmit
     public function request()
     {
         if (!$this->loader->verify_nonce('lxform-nonce')) {
+            $message = __('Your session has expired or the page was open for too long. Please reload the page and try submitting the form again.', 'lxform');
             echo wp_send_json_error([
                 'errors' => [],
-                'message' => __('Permission Denied!', 'lxform')
+                'message' => $message
             ]);
             wp_die();
         }
@@ -101,7 +102,7 @@ class LeadXForms_WpAjax_FormSubmit
         //         if(!$this->loader->is_internet_on()) {
         //             $message = 'Please check your internet connection or try again later';
         //             echo wp_send_json_error([
-        //                 'errors' => [],
+        //                'errors' => [],
         //                 'message' => __($message, 'lxform')
         //             ]);
         //             wp_die();
