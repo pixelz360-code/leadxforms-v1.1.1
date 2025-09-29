@@ -10,6 +10,7 @@ class LeadXForms
 		'includes/class-leadxforms-maildata-filter.php',
 		'includes/class-leadxforms-smtp-connect.php',
 		'includes/wp_ajax/class-leadxforms-wpajax-keyword-sync.php',
+		'includes/wp_ajax/class-leadxforms-wpajax-exist-forms.php',
 		'includes/database/class-leadxforms-database-forms.php',
 		'includes/database/class-leadxforms-database-mail.php',
 		'includes/database/class-leadxforms-database-mail-logs.php',
@@ -104,7 +105,7 @@ class LeadXForms
 		'LeadXForms_WpAjax_LicenseKeyGet',
 		'LeadXForms_WpAjax_KeywordSync',
 		'LeadXForms_Shortcode_Form',
-
+		'LeadXForms_WpAjax_Exist_Forms',
 		'LeadXForms_Database_Migration',
 
 		'LeadXForms_Admin',
